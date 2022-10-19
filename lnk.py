@@ -26,7 +26,7 @@ python lnk.py output.lnk C:/Windows/System32/cmd.exe --desc "This is a descripti
 '''
 
 import sys
-import pylnk
+import pylnk3
 import argparse
 from datetime import datetime
 
@@ -54,8 +54,8 @@ def create_lnk(name, target, mode, args, description, icon, workingDir, is_dir =
     lnk = populate_lnk(name, target, mode, args, description, icon, workingDir)
     
     # Create a DriveEntry object for the target root
-    levels = list(pylnk.path_levels("\\".join(target)))
-    elements = [pylnk.RootEntry(pylnk.ROOT_MY_COMPUTER), pylnk.DriveEntry(target_drive)]
+    levels = list(pylnk3.path_levels("\\".join(target)))
+    elements = [pylnk3.RootEntry(pylnk3.ROOT_MY_COMPUTER), pylnk3.DriveEntry(target_drive)]
 
     # For each level in the path to the target file, create a PathSegmentEntry object
     for level in target:
@@ -66,10 +66,10 @@ def create_lnk(name, target, mode, args, description, icon, workingDir, is_dir =
     # directory based on the is_dir argument
     entry = build_entry(target_file)
     if not is_dir:
-        entry.type = pylnk.TYPE_FILE
+        entry.type = pylnk3.TYPE_FILE
     elements.append(entry)
 
-    lnk.shell_item_id_list = pylnk.LinkTargetIDList()
+    lnk.shell_item_id_list = pylnk3.LinkTargetIDList()
     lnk.shell_item_id_list.items = elements
 
     # Write the .lnk file
@@ -80,7 +80,7 @@ def create_lnk(name, target, mode, args, description, icon, workingDir, is_dir =
 # Create the pylnk object; fill in null drive info, created/modified/accessed
 # times, mode, arguments, description, icon, and path/working dir 
 def populate_lnk(name, target, mode, args, description, icon, workingDir):
-    lnk = pylnk.create(name)
+    lnk = pylnk3.create(name)
     lnk.specify_local_location("\\".join(target))
 
     lnk._link_info.size_local_volume_table = 0
@@ -112,8 +112,8 @@ def populate_lnk(name, target, mode, args, description, icon, workingDir):
 
 # Create a PathSegmentEntry object for a folder in the target file's path.
 def build_entry(name):
-    entry = pylnk.PathSegmentEntry()
-    entry.type = pylnk.TYPE_FOLDER
+    entry = pylnk3.PathSegmentEntry()
+    entry.type = pylnk3.TYPE_FOLDER
     entry.file_size = 0
 
     n = datetime.now()
